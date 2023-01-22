@@ -1,19 +1,38 @@
 package Arthur.Lima.Bank;
 
+import java.util.Random;
+
 public class User{;
-public static int entry;
-public static int exit;
-public static int tot = 0;
+public String firstName;
+public String lastName;
+public int entry;
+public int exit;
+public int tot = 0;
+public int pass;
+public int conta;
 
 
 
- public static void setTot(int t){
+public User(String firstName, String lastName, int tot,int pass){
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.tot = tot;
+    this.pass = pass;
+    this.conta = new Random().nextInt(1000, 9999);
+
+    
+}
+ 
+public  String nomeCompleto(){
+    return firstName + " " + lastName;
+}
+public  void setTot(int t){
         tot = tot + t;
     }   
-    public static void setEntry(int entry){
+    public  void setEntry(int entry){
         tot = tot + entry;
 }
-    public static void setExit(int exit){
+    public  void setExit(int exit){
         tot = tot - exit;
 }
     public int getEntry(){
@@ -24,11 +43,30 @@ public static int tot = 0;
 }
     public int getTot(){
         return tot;
-
-    
+    }
+    public  String getfirstName(){
+        return firstName.toUpperCase();
+    }
+    public  String getlastName(){
+        return lastName.toUpperCase();
     }
 
+    public Integer getPass() {
+        return pass;
+    }
 
+    public void setPass(Integer pass) {
+        this.pass = pass;
+    }
+
+    public Integer getConta() {
+        return conta;
+    }
+
+    public void setConta(Integer conta) {
+        this.conta = conta;
+    };
+    
 
 
 
