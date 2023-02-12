@@ -1,94 +1,98 @@
 package Arthur.Lima.Bank;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 
 public class App {
     public static void main(String[] args){
-        
-        User usuarioLogado = null;
         Scanner scannerA = new Scanner(System.in);
         Scanner scannerB = new Scanner(System.in);
         Scanner scannerC = new Scanner(System.in);
-        
-        int opt = 0;
-        int total = 10000;
-           
-         List<User> usuarios = new ArrayList<>();
-            
-            while(opt != 4)
-            {
-            System.out.println("Qual o seu objetivo?");
-            System.out.println("1 - Ver o saldo total da conta");
-            System.out.println("2 - depositar um valor");
-            System.out.println("3 - Sacar um valor");
-            System.out.println("4 - Finalizar programa");
-            System.out.println("5 - Novo Usuário");
-            System.out.println("6 - Trocar usuário");
-            
-            opt = scannerA.nextInt();
-                if(opt == 1){
-                System.out.println("O valor total de sua conta é de R$" + usuarioLogado.getTot() );
-                opt = 0;
-                }if(opt == 2){
-                    System.out.println("Quanto você quer depositar?"); 
-                    usuarioLogado.setEntry(scannerB.nextInt());
-                       opt = 0;    
-                }if(opt == 3){
-                    System.out.println("Quanto você deseja sacar?");
-                    usuarioLogado.setExit(scannerB.nextInt());
-                    opt = 0;
-                }if(opt == 4){
-                    System.out.println("Programa finalizando em...");
-                    System.out.println("3, 2, 1, 0...");
-                    System.out.println("FIM!");
-                    scannerA.close();
-                    scannerB.close();
-                    scannerC.close();
-                    break;
+        Bank santander = new Bank("0001");
+
+        while(true){
+            System.out.println("I - Entrar em uma conta");
+            System.out.println("C - Criar uma conta");
+            System.out.println("E - Sair");
+            String opc = scannerA.nextLine().toUpperCase();
+            if(opc.equals("I")){
+                List<User> accountList = santander.getUsers();
+                System.out.println("Escolha com base no número da conta: ");
+                for(User cc :accountList ){
+                    System.out.println(cc);
+                    }    
+                    int opt = scannerB.nextInt() - 1;
                     
-                }if(opt > 7){
-                    System.out.println("Deu merda pai!!!");
-                    opt = 0;
-                }if(opt == 5){
-                System.out.println("Qual o seu nome? "); 
-                String nome = scannerC.nextLine();
-                System.out.println("Qual o seu sobrenome? "); 
-                String sobrenome = scannerC.nextLine();
-                System.out.println("Digite uma senha"); 
-                int pass = scannerC.nextInt();
-                User usuarioCriacao = new User(nome, sobrenome, total, pass);
-                usuarios.add(usuarioCriacao);
-                System.out.println("Bem vindo(a) " + usuarioCriacao.nomeCompleto());
-                usuarioLogado = usuarioCriacao;
-                opt = 0;
-                }if(opt == 6){
-                    for (User userfor : usuarios) {
-                        System.out.println("Nome: " + userfor.nomeCompleto() + " | Conta: " + userfor.conta);
-                    }
-
-                    System.out.println("Digite o numero da sua conta: "); 
-                    int contaInfomada = scannerC.nextInt();
-                    System.out.println("Digite sua Senha: "); 
-                    int senhaInfomada = scannerC.nextInt();
-
-                    for (User userfor : usuarios) {
-                       if(userfor.getConta() == contaInfomada && userfor.pass == senhaInfomada){
-                        usuarioLogado = userfor;
-                       }else{
-                        usuarioLogado = null;
+                        int i = opt;
+                        if(opt <= accountList.size()){
+                            if(accountList.contains(accountList.get(i))){
+                                System.out.println("Usuário encontrado!");
+                                System.out.print("ID: ");
+                                int pass = scannerC.nextInt();
+                                if (pass == accountList.get(i).getValor()){
+                                    System.out.println("Acesso concedido");  
+                                    operate(accountList.get(i));
+                                }else{
+                                    System.out.println("Senha inválida!");
+                                }
+                            }
                         
-                       }
-                    }
-                        
-            }   
-           
+                        }else{
+                            System.out.println("Essa conta não existe!");
+                        }   
+                    
+        }            
+           else if(opc.equals("C")){
+                System.out.println("Digite o seu nome:");
+                String nome = scannerA.nextLine();
+                if(nome.trim().isEmpty()){
+                    System.out.println("Nada foi informado, tente de novo!");
+                    }else{
+                        Random num = new Random();
+                        int valor = num.nextInt(1000,9999);
+                        santander.randomId(valor);
+                        User account = santander.createAccount(nome, valor);
+                        santander.insertAccount(account);
+                        operate(account);
+                }
             
+            }else if(opc.equals("E")){
+                break;
+            
+            }else{
+                System.out.println("Opção Inválida, tente novamente! ");
         }
-            
-            
+        }
+}
+          
+        public static void operate(User accountList){
+        Scanner scannerD = new Scanner(System.in);
+        while(true){
+            System.out.println("Escolha uma ação: ");
+            System.out.println("D - Depositar");
+            System.out.println("S - Sacar");
+            System.out.println("E - Sair da conta atual");      
+            String opc = scannerD.nextLine().toUpperCase();
+        
+        if(opc.equals("D")){
+            System.out.println("Quanto você deseja depositar?");
+            accountList.deposite(scannerD.nextDouble());
+        }if(opc.equals("S")){
+            System.out.println("Quanto você deseja sacar?");
+            boolean certo = accountList.withDraw(scannerD.nextDouble());
+            if(!certo){
+                System.out.println("Você não possui esta quantia de saldo!");
+            }
+          
+        }if(opc.equals("E")){
+            break;
+        }
+        
+      } 
+    } 
+}
 
-}
-}
+
+

@@ -1,73 +1,91 @@
 package Arthur.Lima.Bank;
 
+import java.util.List;
 import java.util.Random;
 
+
 public class User{;
-public String firstName;
-public String lastName;
-public int entry;
-public int exit;
-public int tot = 0;
-public int pass;
-public int conta;
+private static final int MAX_LENGTH = 12;
 
+List<User> users;
+private String name;
+private double balance;
+private String cc;
+private String ag;
+private Random id = new Random();
+private int valor = id.nextInt(1000,9999);
 
+private Status rep; 
 
-public User(String firstName, String lastName, int tot,int pass){
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.tot = tot;
-    this.pass = pass;
-    this.conta = new Random().nextInt(1000, 9999);
+public User(String ag,String name, String cc, int valor){
+this.ag = ag;
+this.cc = cc;    
+this.valor = valor;
+setName(name);
+
+rep = new Status(); 
+  
+}
+
+    public void setName(String name){
+    if(name.length() > MAX_LENGTH){
+        this.name = name.substring(0, MAX_LENGTH); 
+    }else{
+        this.name = name;
+    }   System.out.println(this.name);    
+}
+    public String getName(){
+    return name;
+        }
+    public Boolean withDraw(Double value){
+        if(balance < value){
+            return false;
+        }
+            balance -= value;
+            rep.inf("Houve um saque de " + value + ", agora a sua conta contém R$" + balance);
+            return true;
+        
+        
+    }
+    public void deposite(Double value){
+        balance += value;
+        rep.inf("Houve um depósito de " + value + ", agora a sua conta contém R$" + balance);
+    }
+
+    public String getCc() {
+        return cc;
+    }
+
+    public void setCc(String cc) {
+        this.cc = cc;
+    }
+
+    public String getAg() {
+        return ag;
+    }
+
+    public void setAg(String ag) {
+        this.ag = ag;
+    }
+    
+    
+    @Override
+    public String toString() {
+        String result = "A conta " + this.name + " " + this.ag + " / " + this.cc + " possui: R$" + balance;
+        return result;
+    }
+
+    public int getValor() {
+        return valor;
+    }
+
+    public void setValor(int valor) {
+        this.valor = valor;
+    
+    }
+}
+
 
     
-}
- 
-public  String nomeCompleto(){
-    return firstName + " " + lastName;
-}
-public  void setTot(int t){
-        tot = tot + t;
-    }   
-    public  void setEntry(int entry){
-        tot = tot + entry;
-}
-    public  void setExit(int exit){
-        tot = tot - exit;
-}
-    public int getEntry(){
-        return entry;
-}
-    public int getExit(){
-        return exit;
-}
-    public int getTot(){
-        return tot;
-    }
-    public  String getfirstName(){
-        return firstName.toUpperCase();
-    }
-    public  String getlastName(){
-        return lastName.toUpperCase();
-    }
-
-    public Integer getPass() {
-        return pass;
-    }
-
-    public void setPass(Integer pass) {
-        this.pass = pass;
-    }
-
-    public Integer getConta() {
-        return conta;
-    }
-
-    public void setConta(Integer conta) {
-        this.conta = conta;
-    };
-    
 
 
-
-}
